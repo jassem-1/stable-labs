@@ -9,9 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ethersproject/providers": "^5.7.2",
     "@supabase/ssr": "^0.3.0",
     "@supabase/supabase-js": "^2.43.4",
     "axios": "^1.7.2",
+    "ethers": "^6.13.0",
     "next": "14.2.3",
     "react": "^18",
     "react-dom": "^18",
