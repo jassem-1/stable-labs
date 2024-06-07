@@ -43,8 +43,9 @@ const Header: React.FC = () => {
         `https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey=${API_ETHER_KEY}`
       )
       .then((response) => {
-        const safeGasPrice = response.data.result.SafeGasPrice;
-        setGasPrice(safeGasPrice);
+         const safeGasPrice = response.data.result.SafeGasPrice;
+        setGasPrice(safeGasPrice); 
+    
       })
       .catch((error) => {
         console.error("Error fetching gas price:", error);
