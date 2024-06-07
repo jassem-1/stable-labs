@@ -30,26 +30,25 @@ const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({
   });
 
   const connectWallet = async () => {
-    // Initiate wallet selection and connecting process
-    const wallets = await onboard.connectWallet();
-
-    // Assuming the first wallet connected is the one we're interested in
-    const wallet = wallets[0];
-    if (wallet) {
-      const web3Instance = new Web3(wallet.provider);
-      setWeb3(web3Instance);
-      const accounts = await web3Instance.eth.getAccounts();
-      if (accounts.length > 0) {
-        const account = accounts[0];
-        setAccount(account);
-        const balanceWei = await web3Instance.eth.getBalance(account);
-        const balanceEth = Web3.utils.fromWei(balanceWei, 'ether');
-        setBalance(balanceEth);
+    if (!account) {  // only connect if no account is not connected
+      const wallets = await onboard.connectWallet();
+      const wallet = wallets[0];
+      if (wallet) {
+        const web3Instance = new Web3(wallet.provider);
+        setWeb3(web3Instance);
+        const accounts = await web3Instance.eth.getAccounts();
+        if (accounts.length > 0) {
+          const account = accounts[0];
+          setAccount(account);
+          const balanceWei = await web3Instance.eth.getBalance(account);
+          const balanceEth = Web3.utils.fromWei(balanceWei, 'ether');
+          setBalance(balanceEth);
+        }
       }
     }
   };
   const handleMouseEnter = () => {
-    if (account) { // Only show modal if account is connected
+    if (account) { 
       setIsModalVisible(true);
     }
   };
@@ -62,15 +61,14 @@ const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({
       <button
       className={"px-2 py-3 bg-[#1FC7D4] flex justify-center font-semibold text-white text-lg hover:bg-blue-700 rounded-full "}
       onClick={connectWallet}
-      onMouseEnter={handleMouseEnter}
+      onMouseEnter={(handleMouseEnter)}
       onMouseLeave={handleMouseLeave}
-      disabled={!!account} 
     >
       {account ? `Acc: ${account.substring(0, 6)}...${account.substring(account.length - 4)}, Balance: ${balance} ETH` : buttonText}
     </button>
     {isModalVisible && account && (
-        <div className="modal-info" style={{ position: 'absolute', backgroundColor: 'white', padding: '10px', border: '1px solid black' }}>
-          <p>Account: {account}</p>
+        <div className="absolute flex flex-col justify-center items-start break-words bg-white border border-black rounded-2xl p-3 w-52 " >
+          <p className="break-all">Account: {account}</p>
           <p>Balance: {balance} ETH</p>
         </div>
       )}

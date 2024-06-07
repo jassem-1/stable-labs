@@ -86,7 +86,6 @@ const Header: React.FC = () => {
         </div>
         <ConnectWalletButton
         buttonText="Connect Wallet"
-        buttonClass="text-lg hover:bg-blue-700 rounded-full"
       />
       </div>
     </div>
