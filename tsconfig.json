@@ -21,6 +21,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/context/ether.js", "app/context/Ether.js", "app/context/Ether.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/context/ether.js", "app/context/Ether.js", "app/context/Ether.js","RootLayoutContext.tsx"],
   "exclude": ["node_modules"]
 }
