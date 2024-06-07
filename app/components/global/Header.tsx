@@ -1,7 +1,8 @@
-"use client";;
+"use client";
 import { useEffect, useState } from "react";
 import logo from "../../assets/logo.png";
 import axios from "axios";
+import ConnectWalletButton from "../ConnectWallet";
 
 const Header: React.FC = () => {
   const [price, setPrice] = useState([]);
@@ -19,7 +20,7 @@ const Header: React.FC = () => {
           setPrice(response.data.result.ethusd);
           const timestamp = Number(response.data.result.ethusd_timestamp);
 
-        const date = new Date(timestamp);
+          const date = new Date(timestamp);
           setUpdatedPriceDate(
             "UpDate:" +
               date.getHours() +
@@ -28,11 +29,8 @@ const Header: React.FC = () => {
               ":" +
               date.getSeconds()
           );
-          console.log("time",timestamp)
-
+          console.log("time", timestamp);
         });
-
-
     } catch (error) {
       console.log(error);
     }
@@ -40,15 +38,17 @@ const Header: React.FC = () => {
 
   const getGasPrice = () => {
     const API_ETHER_KEY = "5FKGRH8CW2C4TIW9ME321HB6XXY53HZZP1";
-    axios.get(`https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey=${API_ETHER_KEY}`)
+    axios
+      .get(
+        `https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey=${API_ETHER_KEY}`
+      )
       .then((response) => {
         const safeGasPrice = response.data.result.SafeGasPrice;
         setGasPrice(safeGasPrice);
       })
       .catch((error) => {
-        console.error('Error fetching gas price:', error);
+        console.error("Error fetching gas price:", error);
       });
-    
   };
 
   useEffect(() => {
@@ -60,7 +60,6 @@ const Header: React.FC = () => {
     console.log(`Safe Gas Price: ${gasPrice} Gwei`);
   }, [gasPrice]);
 
-  
   useEffect(() => {
     console.log(updatedPriceDate);
   }, [updatedPriceDate]);
@@ -81,15 +80,14 @@ const Header: React.FC = () => {
         </div>
       </div>
       <div className="flex justify-between items-center w-full ">
-      <div className="flex flex-col text-white">
-  <p>ether price : $ {price} </p>
-  <p>gas price : {gasPrice} Gwei</p>
-</div>
-        <div> 
-          <button className="px-4 py-1 bg-white border border-black rounded-2xl ">
-            connect wallet
-          </button>
+        <div className="flex flex-col text-white">
+          <p>ether price : $ {price} </p>
+          <p>gas price : {gasPrice} Gwei</p>
         </div>
+        <ConnectWalletButton
+        buttonText="Connect Wallet"
+        buttonClass="text-lg hover:bg-blue-700 rounded-full"
+      />
       </div>
     </div>
   );
