@@ -5,21 +5,21 @@ import Web3 from 'web3'; // Ensure Web3 is installed for this to work
 
 interface ConnectWalletButtonProps {
   buttonText?: string;
-  buttonClass?: string;
 }
 
 const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({
   buttonText = "Connect Wallet",
-  buttonClass = ""
 }) => {
   const [web3, setWeb3] = useState<Web3 | null>(null);
   const [account, setAccount] = useState<string>('');
   const [balance, setBalance] = useState<string>('');
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
 
   const onboard = Onboard({
     wallets: [injectedModule()],
     chains: [
-      {
+      { 
         id: '0x1',
         token: 'ETH',
         label: 'Ethereum Mainnet',
@@ -48,14 +48,34 @@ const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({
       }
     }
   };
+  const handleMouseEnter = () => {
+    if (account) { // Only show modal if account is connected
+      setIsModalVisible(true);
+    }
+  };
 
+  const handleMouseLeave = () => {
+    setIsModalVisible(false);
+  };
   return (
-    <button
-      className={`px-2 py-3 bg-[#1FC7D4] w-full flex justify-center font-semibold text-white ${buttonClass}`}
+    <div>
+      <button
+      className={"px-2 py-3 bg-[#1FC7D4] flex justify-center font-semibold text-white text-lg hover:bg-blue-700 rounded-full "}
       onClick={connectWallet}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      disabled={!!account} 
     >
       {account ? `Acc: ${account.substring(0, 6)}...${account.substring(account.length - 4)}, Balance: ${balance} ETH` : buttonText}
     </button>
+    {isModalVisible && account && (
+        <div className="modal-info" style={{ position: 'absolute', backgroundColor: 'white', padding: '10px', border: '1px solid black' }}>
+          <p>Account: {account}</p>
+          <p>Balance: {balance} ETH</p>
+        </div>
+      )}
+    </div>
+  
   );
 };
 

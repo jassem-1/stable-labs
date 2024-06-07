@@ -65,7 +65,7 @@ const Header: React.FC = () => {
   }, [updatedPriceDate]);
 
   return (
-    <div className="fixed w-full bg-[#172554] shadow-lg  z-20">
+    <div className="fixed w-full bg-[#172554] shadow-lg p-2 z-20">
       <div className="flex justify-between items-center w-full px-8 py-1">
         <div>
           <img src={logo.src} alt="" className="w-10 h-10" />
