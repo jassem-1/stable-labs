@@ -15,7 +15,10 @@ interface EtherscanContextProps {
   tenBlockWithDetails: any[];  // Add this line for the block details array
   transactionDetails: TransactionResponse | null;
   getTransactionDetails: (txHash: string) => Promise<TransactionResponse | null>;
+  
+  blockDetails: Block | null;
 
+  getBlockDetails: (blockNumber: number) => Promise<Block | null>;
 
 }
 
@@ -44,7 +47,7 @@ const EtherProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [gasPrice, setGasPrice] = useState<string | null>(null);
 
   const [transactionDetails, setTransactionDetails] = useState<TransactionResponse | null>(null);
-
+  const [blockDetails, setBlockDetails] = useState<Block | null>(null);
   const accountDetails = async () => {
     try {
       const getCurrentBlock = await provider.getBlockNumber();
@@ -91,13 +94,24 @@ const EtherProvider: FC<{ children: ReactNode }> = ({ children }) => {
       return null;
     }
   };
+  const getBlockDetails = async (blockNumber: number): Promise<Block | null> => {
+    try {
+      const details = await provider.getBlock(blockNumber);
+      setBlockDetails(details);
+      return details;
+    } catch (error) {
+      console.error("Failed to fetch block details:", error);
+      return null;
+    }
+  };
+
 
   useEffect(() => {
     accountDetails();
   }, []);
 
   return (
-    <EtherscanContext.Provider value={{ data, currentBlock, topTenBlock, provider, gasPrice, transaction, tenBlockWithDetails, transactionDetails, getTransactionDetails }}>
+    <EtherscanContext.Provider value={{ data, currentBlock, topTenBlock, provider, gasPrice, transaction, tenBlockWithDetails, transactionDetails, getTransactionDetails, blockDetails, getBlockDetails }}>
       {children}
     </EtherscanContext.Provider>
   );
