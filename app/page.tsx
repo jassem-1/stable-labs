@@ -40,7 +40,7 @@ export default function Home() {
     throw new Error("Home must be used within a EtherProvider");
   }
 
-  const { data, tenBlockWithDetails, transaction } = context;
+  const {  tenBlockWithDetails, transaction } = context;
   console.log(tenBlockWithDetails);
 
   return (
@@ -64,10 +64,11 @@ export default function Home() {
         </form>
       </div>
 
+      <div className="pt-32 py-16 max-w-6xl mx-auto">
       <div className="mt-10">
         <h3 className="text-lg font-bold my-2">Latest Blocks</h3>
-        <div className="space-y-4">
-          {tenBlockWithDetails.map((el, i) => (
+        <div className="max-h-96 overflow-y-auto space-y-4 p-2 border border-gray-300 rounded-lg">
+          {tenBlockWithDetails.slice(0, 6).map((el, i) => (
             <div key={i + 1} className="bg-white shadow-lg p-5 rounded-lg">
               <div className="flex flex-col space-y-2">
                 <p className="text-blue-600">
@@ -75,40 +76,25 @@ export default function Home() {
                     Block Number: {el.number}
                   </Link>
                 </p>
-                <p>Timestamp: {el.timestamp}</p>
+                <p>Timestamp: {new Date(el.timestamp * 1000).toLocaleString()}</p>
                 <div>
                   <p>
-                    Miner:{" "}
-                    <Link
-                      href={{
-                        pathname: "/account",
-                        query: { miner: el.miner },
-                      }}
-                    >
+                    Miner:{' '}
+                    <Link href={`/account?miner=${el.miner}`}>
                       {el.miner.slice(0, 35)}...
                     </Link>
                   </p>
                   <p>
-                    Transactions:{" "}
-                    <Link
-                      href={{
-                        pathname: "/account",
-                        query: { number: el.number.toString() },
-                      }}
-                    >
+                    Transactions:{' '}
+                    <Link href={`/block/${el.number.toString()}`}>
                       {el.transactions.length}
-                    </Link>{" "}
+                    </Link>{' '}
                     in last 3 sec
                   </p>
                 </div>
                 <div>
                   <p>Base Fee: {convertIntoETH(el.baseFeePerGas)} ETH</p>
-                  <Image
-                    src="/path/to/etherLogo.png"
-                    alt="Ether logo"
-                    width={40}
-                    height={40}
-                  />
+                  <Image src="/path/to/etherLogo.png" alt="Ether logo" width={40} height={40} />
                 </div>
               </div>
             </div>
@@ -118,21 +104,21 @@ export default function Home() {
 
       <div className="mt-10">
         <h3 className="text-lg font-bold my-2">Latest Transactions</h3>
-                <div className="space-y-4">
-                  {transaction?.transactions.map((txHash, i) => (
-                    <div key={i} className="bg-white shadow-lg p-5 rounded-lg">
-                      <div className="flex justify-between">
-                        <p className="text-blue-600">
-                        <Link href={`/transaction/${transaction.transactions[i]}`}>
-          Transaction: {txHash.slice(0, 55)}
-        </Link>
-
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+        <div className="max-h-96 overflow-y-auto space-y-4 p-2 border border-gray-300 rounded-lg">
+          {transaction?.transactions.slice(0, 6).map((txHash, i) => (
+            <div key={i} className="bg-white shadow-lg p-5 rounded-lg">
+              <div className="flex justify-between">
+                <p className="text-blue-600">
+                  <Link href={`/transaction/${txHash}`}>
+                    Transaction: {txHash.slice(0, 55)}
+                  </Link>
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
+    </div>
     </div>
   );
 }

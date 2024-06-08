@@ -35,14 +35,34 @@ const BlockPage = () => {
   const baseFeePerGas = blockDetails.baseFeePerGas || 0; 
 
   return (
-    <div>
-      <h1>Block Number: {blockNumber}</h1>
-      <p>Timestamp: {new Date(blockDetails.timestamp * 1000).toLocaleString()}</p>
-      <p>Miner: {blockDetails.miner}</p>
-      <p>Number of Transactions: {blockDetails.transactions.length}</p>
-      <p>Gas Used: {blockDetails.gasUsed.toString()}</p>
-      <p>Gas Limit: {blockDetails.gasLimit.toString()}</p>
-      <p>Base Fee Per Gas: {ethers.formatUnits(baseFeePerGas, 'gwei')} Gwei</p>
+    <div className="max-w-4xl mx-auto mt-10 p-5 bg-gray-800 text-white rounded-lg shadow-lg">
+      <h1 className="text-2xl font-bold mb-5">Block Number: {blockNumber}</h1>
+      <div className="space-y-4">
+        <div className="flex justify-between items-center">
+          <span>Timestamp:</span>
+          <span>{new Date(blockDetails.timestamp * 1000).toLocaleString()}</span>
+        </div>
+        <div className="flex justify-between items-center">
+          <span>Miner:</span>
+          <span>{blockDetails.miner}</span>
+        </div>
+        <div className="flex justify-between items-center">
+          <span>Number of Transactions:</span>
+          <span>{blockDetails.transactions.length}</span>
+        </div>
+        <div className="flex justify-between items-center">
+          <span>Gas Used:</span>
+          <span>{blockDetails.gasUsed.toString()}</span>
+        </div>
+        <div className="flex justify-between items-center">
+          <span>Gas Limit:</span>
+          <span>{blockDetails.gasLimit.toString()}</span>
+        </div>
+        <div className="flex justify-between items-center">
+          <span>Base Fee Per Gas:</span>
+          <span>{blockDetails.baseFeePerGas !== null ? ethers.formatUnits(blockDetails.baseFeePerGas, 'gwei') : 'N/A'} Gwei</span>
+        </div>
+      </div>
     </div>
   );
 };
