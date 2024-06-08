@@ -16,7 +16,7 @@ export default function Home() {
     return ETH;
   };
 
-  const accountAddress = (event: React.FormEvent) => {
+/*   const accountAddress = (event: React.FormEvent) => {
     event.preventDefault();
     const element = document.getElementById(
       "accountAddress"
@@ -26,7 +26,7 @@ export default function Home() {
       const address = element.value.trim();
       if (address) {
         setUserAccount(address);
-        router.push(`/account?${address}`);
+        router.push(`/account/${address}`);
         element.value = "";
       } else {
         console.error("No address provided");
@@ -34,7 +34,36 @@ export default function Home() {
     } else {
       console.error("Element not found");
     }
+  }; */
+
+  const handleSearch = (event: React.FormEvent) => {
+    event.preventDefault();
+    const element = document.getElementById("searchInput") as HTMLInputElement;
+
+    if (element) {
+      const query = element.value.trim();
+      if (query) {
+        if (ethers.isAddress(query)) {
+          // It's an account address
+          router.push(`/account/${query}`);
+        } else if (/^\d+$/.test(query)) {
+          // It's a block number
+          router.push(`/block/${query}`);
+        } else if (/^0x([A-Fa-f0-9]{64})$/.test(query)) {
+          // It's a transaction hash
+          router.push(`/transaction/${query}`);
+        } else {
+          console.error("Invalid input");
+        }
+        element.value = "";
+      } else {
+        console.error("No input provided");
+      }
+    } else {
+      console.error("Element not found");
+    }
   };
+
 
   if (!context) {
     throw new Error("Home must be used within a EtherProvider");
@@ -46,21 +75,19 @@ export default function Home() {
   return (
     <div className=" py-16 ">
       <div className="bg-gray-100 p-5">
-        <form className="flex flex-col space-y-4">
+      <form className="flex flex-col space-y-4" onSubmit={handleSearch}>
           <input
             type="text"
-            placeholder="Ether Account address"
-            id="accountAddress"
+            placeholder="Search by Account Address, Block Number, or Transaction Hash"
+            id="searchInput"
             className="p-2 border border-gray-300 rounded"
           />
-          <Link href={{ pathname: "/account", query: { userAccount } }}>
-            <button
-              onClick={accountAddress}
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            >
-              Connect Wallet
-            </button>
-          </Link>
+          <button
+            type="submit"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Search
+          </button>
         </form>
       </div>
 

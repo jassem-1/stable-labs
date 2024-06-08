@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import logo from "../../assets/logo.png";
 import axios from "axios";
 import ConnectWalletButton from "../ConnectWallet";
+import Link from "next/link";
 
 const Header: React.FC = () => {
   const [price, setPrice] = useState([]);
@@ -11,7 +12,7 @@ const Header: React.FC = () => {
 
   const getEtherPrice = () => {
     try {
-      const API_ETHER_KEY = "5FKGRH8CW2C4TIW9ME321HB6XXY53HZZP1";
+      const API_ETHER_KEY = "DCBMMRGDHRZ9ZAXN9F98II2JQ2GREDSG29";
 
       axios
         .get(
@@ -72,7 +73,9 @@ const Header: React.FC = () => {
     <div className="fixed w-full bg-[#172554] shadow-lg p-2 z-20">
       <div className="flex justify-between items-center w-full px-8 py-1">
         <div>
+          <Link href="/">
           <img src={logo.src} alt="" className="w-10 h-10" />
+          </Link>
         </div>
         <ul className="menu flex justify-center items-center gap-x-8 text-2xl cursor-pointer"></ul>
         <div className="flex items-center gap-x-8 cursor-pointer">
