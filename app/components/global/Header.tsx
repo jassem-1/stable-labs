@@ -11,7 +11,8 @@ const Header: React.FC = () => {
 
   const getEtherPrice = () => {
     try {
-      const API_ETHER_KEY = "5FKGRH8CW2C4TIW9ME321HB6XXY53HZZP1";
+      const API_ETHER_KEY = process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY; 
+
       axios
         .get(
           `https://api.etherscan.io/api?module=stats&action=ethprice&apikey=${API_ETHER_KEY}`

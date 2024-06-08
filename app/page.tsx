@@ -44,7 +44,7 @@ export default function Home() {
   console.log(tenBlockWithDetails);
 
   return (
-    <div className="pt-32 py-16">
+    <div className=" py-16 ">
       <div className="bg-gray-100 p-5">
         <form className="flex flex-col space-y-4">
           <input
@@ -64,7 +64,7 @@ export default function Home() {
         </form>
       </div>
 
-      <div className="pt-32 py-16 max-w-6xl mx-auto">
+      <div className="py-16 max-w-6xl mx-auto flex gap-x-4">
       <div className="mt-10">
         <h3 className="text-lg font-bold my-2">Latest Blocks</h3>
         <div className="max-h-96 overflow-y-auto space-y-4 p-2 border border-gray-300 rounded-lg">

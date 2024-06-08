@@ -2,7 +2,10 @@
 import { ethers } from "ethers";
 import { createContext, ReactNode, FC, useEffect, useState } from "react";
 import { Block, TransactionResponse } from "ethers";
-
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { WagmiProvider } from 'wagmi';
+import { config } from "./wagmi_config/config";
+const queryClient = new QueryClient()
 
 
 interface EtherscanContextProps {
@@ -119,9 +122,16 @@ const EtherProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
 const RootLayoutClient: FC<{ children: ReactNode }> = ({ children }) => {
   return (
+    <WagmiProvider config={config}>
+      <QueryClientProvider client={queryClient}>
+
     <EtherProvider>
       <div>{children}</div>
     </EtherProvider>
+    </QueryClientProvider>
+
+    </WagmiProvider>
+
   );
 };
 

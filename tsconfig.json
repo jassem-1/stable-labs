@@ -23,6 +23,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/context/ether.js", "app/context/Ether.js", "app/context/Ether.js","RootLayoutContext.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/context/ether.js", "app/context/Ether.js", "app/context/Ether.js","RootLayoutContext.tsx", "app/block/[number]"],
   "exclude": ["node_modules"]
 }
