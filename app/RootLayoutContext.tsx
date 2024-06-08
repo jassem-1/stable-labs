@@ -1,6 +1,6 @@
 "use client";;
 import { ethers } from "ethers";
-import { createContext, ReactNode, FC, useState } from "react";
+import { createContext, ReactNode, FC, useEffect, useState } from "react";
 import { Block, TransactionResponse } from "ethers";
 
 
@@ -92,7 +92,9 @@ const EtherProvider: FC<{ children: ReactNode }> = ({ children }) => {
     }
   };
 
-
+  useEffect(() => {
+    accountDetails();
+  }, []);
 
   return (
     <EtherscanContext.Provider value={{ data, currentBlock, topTenBlock, provider, gasPrice, transaction, tenBlockWithDetails, transactionDetails, getTransactionDetails }}>
