@@ -1,5 +1,6 @@
-import { http, createConfig } from 'wagmi'
-import { mainnet, sepolia } from 'wagmi/chains'
+import { createClient } from 'viem';
+import { http, createConfig } from 'wagmi';
+import { mainnet, sepolia } from 'wagmi/chains';
 
 export const config = createConfig({
   chains: [mainnet, sepolia],
@@ -8,3 +9,7 @@ export const config = createConfig({
     [sepolia.id]: http(),
   },
 })
+export const client = createClient({ 
+    chain: mainnet,
+    transport: http()
+  })
