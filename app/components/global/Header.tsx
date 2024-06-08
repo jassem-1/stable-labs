@@ -11,7 +11,7 @@ const Header: React.FC = () => {
 
   const getEtherPrice = () => {
     try {
-      const API_ETHER_KEY = process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY; 
+      const API_ETHER_KEY = "5FKGRH8CW2C4TIW9ME321HB6XXY53HZZP1";
 
       axios
         .get(
@@ -30,7 +30,9 @@ const Header: React.FC = () => {
               ":" +
               date.getSeconds()
           );
-          console.log("time", timestamp);
+          console.log("timeee", timestamp);
+          console.log("ether price");
+
         });
     } catch (error) {
       console.log(error);
