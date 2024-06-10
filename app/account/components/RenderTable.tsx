@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { Tooltip as ReactTooltip } from "react-tooltip";
+import 'react-tooltip/dist/react-tooltip.css';
 
 type TokenTransaction = {
   hash: string;
@@ -39,6 +41,7 @@ const TokenTable: React.FC<Props> = ({ transactions, tokenType }) => {
   const truncateText = (text: string, maxLength: number) => {
     return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
   };
+
   return (
     <div>
       <h3>{tokenType} Transactions</h3>
@@ -47,48 +50,13 @@ const TokenTable: React.FC<Props> = ({ transactions, tokenType }) => {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Transaction Hash
-                </th>
-                <th
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Block
-                </th>
-                <th
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Age
-                </th>
-                <th
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  From
-                </th>
-                <th
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  To
-                </th>
-                <th
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Value
-                </th>
-                <th
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Token
-                </th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Transaction Hash</th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Block</th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Age</th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">From</th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">To</th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Value</th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Token</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
@@ -96,45 +64,50 @@ const TokenTable: React.FC<Props> = ({ transactions, tokenType }) => {
                 <tr key={index}>
                   <td
                     className="px-6 py-4 whitespace-nowrap overflow-hidden overflow-ellipsis max-w-[100px]"
-                    title={tx.hash}
+                    data-tooltip-id={`tooltip-hash-${index}`}
+                    data-tooltip-content={tx.hash}
                   >
                     {truncateText(tx.hash, 14)}
                   </td>
                   <td
                     className="px-6 py-4 whitespace-nowrap overflow-hidden overflow-ellipsis max-w-[100px]"
-                    title={tx.blockNumber}
+                    data-tooltip-id={`tooltip-block-${index}`}
+                    data-tooltip-content={tx.blockNumber}
                   >
                     {tx.blockNumber}
                   </td>
                   <td
                     className="px-6 py-4 whitespace-nowrap overflow-hidden overflow-ellipsis max-w-[100px]"
-                    title={new Date(
-                      parseInt(tx.timeStamp) * 1000
-                    ).toLocaleString()}
+                    data-tooltip-id={`tooltip-age-${index}`}
+                    data-tooltip-content={new Date(parseInt(tx.timeStamp) * 1000).toLocaleString()}
                   >
                     {new Date(parseInt(tx.timeStamp) * 1000).toLocaleString()}
                   </td>
                   <td
                     className="px-6 py-4 whitespace-nowrap overflow-hidden overflow-ellipsis max-w-[100px]"
-                    title={tx.from}
+                    data-tooltip-id={`tooltip-from-${index}`}
+                    data-tooltip-content={tx.from}
                   >
                     {truncateText(tx.from, 14)}
                   </td>
                   <td
                     className="px-6 py-4 whitespace-nowrap overflow-hidden overflow-ellipsis max-w-[100px]"
-                    title={tx.to}
+                    data-tooltip-id={`tooltip-to-${index}`}
+                    data-tooltip-content={tx.to}
                   >
                     {truncateText(tx.to, 14)}
                   </td>
                   <td
                     className="px-6 py-4 whitespace-nowrap overflow-hidden overflow-ellipsis max-w-[100px]"
-                    title={tx.value}
+                    data-tooltip-id={`tooltip-value-${index}`}
+                    data-tooltip-content={tx.value}
                   >
                     {tx.value}
                   </td>
                   <td
                     className="px-6 py-4 whitespace-nowrap overflow-hidden overflow-ellipsis max-w-[100px]"
-                    title={`${tx.tokenName} (${tx.tokenSymbol})`}
+                    data-tooltip-id={`tooltip-token-${index}`}
+                    data-tooltip-content={`${tx.tokenName} (${tx.tokenSymbol})`}
                   >
                     {truncateText(`${tx.tokenName} (${tx.tokenSymbol})`, 14)}
                   </td>
@@ -142,27 +115,67 @@ const TokenTable: React.FC<Props> = ({ transactions, tokenType }) => {
               ))}
             </tbody>
           </table>
+
+          {currentTransactions.map((tx, index) => (
+            <ReactTooltip
+              id={`tooltip-hash-${index}`}
+              className="custom-tooltip"
+              key={`tooltip-hash-${index}`}
+            />
+          ))}
+
+          {currentTransactions.map((tx, index) => (
+            <ReactTooltip
+              id={`tooltip-block-${index}`}
+              className="custom-tooltip"
+              key={`tooltip-block-${index}`}
+            />
+          ))}
+
+          {currentTransactions.map((tx, index) => (
+            <ReactTooltip
+              id={`tooltip-age-${index}`}
+              className="custom-tooltip"
+              key={`tooltip-age-${index}`}
+            />
+          ))}
+
+          {currentTransactions.map((tx, index) => (
+            <ReactTooltip
+              id={`tooltip-from-${index}`}
+              className="custom-tooltip"
+              key={`tooltip-from-${index}`}
+            />
+          ))}
+
+          {currentTransactions.map((tx, index) => (
+            <ReactTooltip
+              id={`tooltip-to-${index}`}
+              className="custom-tooltip"
+              key={`tooltip-to-${index}`}
+            />
+          ))}
+
+          {currentTransactions.map((tx, index) => (
+            <ReactTooltip
+              id={`tooltip-value-${index}`}
+              className="custom-tooltip"
+              key={`tooltip-value-${index}`}
+            />
+          ))}
+
+          {currentTransactions.map((tx, index) => (
+            <ReactTooltip
+              id={`tooltip-token-${index}`}
+              className="custom-tooltip"
+              key={`tooltip-token-${index}`}
+            />
+          ))}
+
           <div className="flex justify-between mt-4">
-            <button
-              onClick={handlePreviousPage}
-              disabled={currentPage === 1}
-              className="px-4 py-2 bg-gray-200 rounded"
-            >
-              Previous
-            </button>
-            <span>
-              Page {currentPage} of{" "}
-              {Math.ceil(transactions.length / rowsPerPage)}
-            </span>
-            <button
-              onClick={handleNextPage}
-              disabled={
-                currentPage === Math.ceil(transactions.length / rowsPerPage)
-              }
-              className="px-4 py-2 bg-gray-200 rounded"
-            >
-              Next
-            </button>
+            <button onClick={handlePreviousPage} disabled={currentPage === 1} className="px-4 py-2 bg-gray-200 rounded">Previous</button>
+            <span>Page {currentPage} of {Math.ceil(transactions.length / rowsPerPage)}</span>
+            <button onClick={handleNextPage} disabled={currentPage === Math.ceil(transactions.length / rowsPerPage)} className="px-4 py-2 bg-gray-200 rounded">Next</button>
           </div>
         </>
       ) : (

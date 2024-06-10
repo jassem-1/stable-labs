@@ -15,7 +15,7 @@ interface EtherscanContextProps {
   provider: ethers.JsonRpcProvider;
   gasPrice: string | null;
   transaction: Block | null;  
-  tenBlockWithDetails: any[];  // Add this line for the block details array
+  tenBlockWithDetails: any[];  
   transactionDetails: TransactionResponse | null;
   getTransactionDetails: (txHash: string) => Promise<TransactionResponse | null>;
   
