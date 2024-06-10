@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@ethersproject/providers": "^5.7.2",
+    "@moralisweb3/common-evm-utils": "^2.26.4",
     "@supabase/ssr": "^0.3.0",
     "@supabase/supabase-js": "^2.43.4",
     "@tanstack/react-query": "^5.40.1",
@@ -19,6 +20,7 @@
     "axios": "^1.7.2",
     "bnc-onboard": "^1.39.1",
     "ethers": "^6.13.0",
+    "moralis": "^2.26.4",
     "next": "14.2.3",
     "react": "^18",
     "react-dom": "^18",

@@ -6,6 +6,9 @@ import { client } from "@/app/wagmi_config/config";
 import axios from "axios";
 import TokenTable from "../components/RenderTable";
 import TokenTabs from "../components/TokenTabs";
+import Moralis from "moralis";
+import { EvmChain } from "@moralisweb3/common-evm-utils";
+
 
 type TokenTransaction = {
   blockNumber: string;
@@ -26,6 +29,7 @@ type TokenTransaction = {
 type Transaction = {
   hash: string;
 };
+let isMoralisStarted = false;
 
 export default function AccountPage() {
   const [accountAddress, setAccountAddress] = useState("");
@@ -60,6 +64,7 @@ export default function AccountPage() {
       fetchERC20Transactions(formattedAddress);
       fetchERC721Transactions(formattedAddress);
       fetchERC1155Transactions(formattedAddress);
+      runApp(formattedAddress);
     }
   }, []);
 
@@ -154,7 +159,33 @@ export default function AccountPage() {
       setErc721Transactions([]);
     }
   };
+ 
+  const runApp = async (address: string) => {
+    if (!isMoralisStarted) {
+      await Moralis.start({
+        apiKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6Ijk5OWFmZTI4LTQ4NmUtNGNlZS04YmJjLTc2ZWE2OWYyYTNlYSIsIm9yZ0lkIjoiMzk1ODg1IiwidXNlcklkIjoiNDA2Nzk5IiwidHlwZUlkIjoiMGUyOWMyZTgtNzQ1My00ZGYzLWI0NmYtN2NkYjIwYzYzMDFjIiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE3MTgwNTI2MzgsImV4cCI6NDg3MzgxMjYzOH0.ri5uFEgtz6l4iEdQB79hxj0w_O27TMP-YWXEVAlXaJU",
+      });
+      isMoralisStarted = true;
+    }
 
+    try {
+      const chain = EvmChain.ETHEREUM;
+
+      const response = await Moralis.EvmApi.token.getWalletTokenBalances({
+        address,
+        chain,
+
+      });
+
+      console.log("ERC-20 holdings are ", response.toJSON());
+    } catch (error :any) {
+      if (error.message.includes('over 2000 tokens')) {
+        console.error("Wallet contains over 2000 tokens, unable to fetch all balances.");
+      } else {
+        console.error("Error fetching wallet token balances:", error);
+      }
+    }
+  };
   const fetchERC1155Transactions = async (address: string) => {
     const API_ETHER_KEY = "DCBMMRGDHRZ9ZAXN9F98II2JQ2GREDSG29";
 
@@ -173,6 +204,7 @@ export default function AccountPage() {
       setErc1155Transactions([]);
     }
   };
+
   const renderTable = () => {
     switch (selectedTab) {
       case 'ERC-20':
