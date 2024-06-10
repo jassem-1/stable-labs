@@ -215,7 +215,7 @@ const TokenTable: React.FC<Props> = ({ transactions, tokenType }) => {
             />
           ))}
 
-          <div className="flex justify-between mt-4">
+          <div className="flex justify-between mt-4 w-1/3">
             <button
               onClick={handlePreviousPage}
               disabled={currentPage === 1}

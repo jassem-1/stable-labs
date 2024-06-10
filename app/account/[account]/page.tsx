@@ -5,6 +5,7 @@ import { getBalance } from "viem/actions";
 import { client } from "@/app/wagmi_config/config";
 import axios from "axios";
 import TokenTable from "../components/RenderTable";
+import TokenTabs from "../components/TokenTabs";
 
 type TokenTransaction = {
   blockNumber: string;
@@ -29,9 +30,12 @@ type Transaction = {
 export default function AccountPage() {
   const [accountAddress, setAccountAddress] = useState("");
   const [transactionHashes, setTransactionHashes] = useState<string[]>([]);
+  const [selectedTab, setSelectedTab] = useState('ERC-20');
 
   /* const [transactions, setTransactions] = useState<Transaction[]>([]);
    */ const [isLoading, setIsLoading] = useState(true);
+
+
   const [balance, setBalance] = useState("0");
   const [erc20Transactions, setErc20Transactions] = useState<
     TokenTransaction[]
@@ -114,7 +118,7 @@ export default function AccountPage() {
   };
 
   const fetchERC20Transactions = async (address: string) => {
-    const API_ETHER_KEY = "5FKGRH8CW2C4TIW9ME321HB6XXY53HZZP1";
+    const API_ETHER_KEY = "KR57X3MVZUU24DCBMNX3ZABVF4PUXKPVAH";
 
     try {
       const response = await axios.get(
@@ -169,7 +173,18 @@ export default function AccountPage() {
       setErc1155Transactions([]);
     }
   };
-
+  const renderTable = () => {
+    switch (selectedTab) {
+      case 'ERC-20':
+        return <TokenTable transactions={erc20Transactions} tokenType="ERC-20" />;
+      case 'ERC-721':
+        return <TokenTable transactions={erc721Transactions} tokenType="ERC-721" />;
+      case 'ERC-1155':
+        return <TokenTable transactions={erc1155Transactions} tokenType="ERC-1155" />;
+      default:
+        return null;
+    }
+  };
   return (
     <div>
       {!accountAddress ? (
@@ -190,15 +205,8 @@ export default function AccountPage() {
           ) : (
             <p>No transactions found.</p>
           )}
-
-          <h3>ERC-20 Transactions</h3>
-          <TokenTable transactions={erc20Transactions} tokenType="ERC-20" />
-
-          <h3>ERC-721 Transactions</h3>
-          <TokenTable transactions={erc721Transactions} tokenType="ERC-721" />
-
-          <h3>ERC-1155 Transactions</h3>
-          <TokenTable transactions={erc1155Transactions} tokenType="ERC-1155" />
+  <TokenTabs selectedTab={selectedTab} onSelectTab={setSelectedTab} />
+          {renderTable()}
         </>
       )}
     </div>
