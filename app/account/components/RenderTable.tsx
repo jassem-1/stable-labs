@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React, { useState } from "react";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
@@ -110,7 +111,9 @@ const TokenTable: React.FC<Props> = ({ transactions, tokenType }) => {
                     data-tooltip-content={tx.blockNumber}
                     style={{ maxWidth: "14ch" }}
                   >
+                    <Link href={`/block/${tx.blockNumber.toString()}`}>
                     {tx.blockNumber}
+                  </Link>  
                   </td>
                   <td
                     className="px-2 py-4 whitespace-nowrap overflow-hidden text-sm overflow-ellipsis"
@@ -128,7 +131,9 @@ const TokenTable: React.FC<Props> = ({ transactions, tokenType }) => {
                     data-tooltip-content={tx.from}
                     style={{ maxWidth: "14ch" }}
                   >
-                    {truncateText(tx.from, 14)}
+                  <Link href={`/account/${tx.from.toString()}`}>
+                  {truncateText(tx.from, 14)}
+                  </Link>                  
                   </td>
                   <td
                     className="px-2 py-4 whitespace-nowrap overflow-hidden text-sm overflow-ellipsis"
@@ -136,7 +141,9 @@ const TokenTable: React.FC<Props> = ({ transactions, tokenType }) => {
                     data-tooltip-content={tx.to}
                     style={{ maxWidth: "14ch" }}
                   >
-                    {truncateText(tx.to, 14)}
+                     <Link href={`/account/${tx.to.toString()}`}>
+                     {truncateText(tx.to, 14)}
+                  </Link>  
                   </td>
                   <td
                     className="px-2 py-4 whitespace-nowrap overflow-hidden text-sm  overflow-ellipsis"

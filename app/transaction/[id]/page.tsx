@@ -2,6 +2,7 @@
 
 import { EtherscanContext } from '@/app/RootLayoutContext';
 import { ethers } from 'ethers';
+import Link from 'next/link';
 import { useState, useEffect, useContext } from 'react';
 
 const TransactionPage = () => {
@@ -43,11 +44,17 @@ const TransactionPage = () => {
       </div>
       <div className="flex justify-between items-center">
         <span className="font-semibold">From:</span>
-        <span>{transactionDetails.from}</span>
+        <span>
+        <Link href={`/account/${transactionDetails.from.toString()}`}>
+        {transactionDetails.from}
+              </Link>     
+          </span>
       </div>
       <div className="flex justify-between items-center">
         <span className="font-semibold">To:</span>
-        <span>{transactionDetails.to}</span>
+        <span><Link href={`/account/${transactionDetails?.to?.toString()}`}>
+        {transactionDetails?.to}
+          </Link> </span>
       </div>
       <div className="flex justify-between items-center">
         <span className="font-semibold">Value:</span>

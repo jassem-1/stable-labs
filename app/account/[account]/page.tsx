@@ -38,7 +38,9 @@ export default function AccountPage() {
 
   /* const [transactions, setTransactions] = useState<Transaction[]>([]);
    */ const [isLoading, setIsLoading] = useState(true);
-
+   const [tokenHoldings, setTokenHoldings] = useState<any[]>([]);
+   const [showDropdown, setShowDropdown] = useState(false);
+ 
 
   const [balance, setBalance] = useState("0");
   const [erc20Transactions, setErc20Transactions] = useState<
@@ -177,7 +179,7 @@ export default function AccountPage() {
 
       });
 
-      console.log("ERC-20 holdings are ", response.toJSON());
+      setTokenHoldings(response.toJSON());
     } catch (error :any) {
       if (error.message.includes('over 2000 tokens')) {
         console.error("Wallet contains over 2000 tokens, unable to fetch all balances.");
@@ -217,6 +219,11 @@ export default function AccountPage() {
         return null;
     }
   };
+
+  const handleToggleDropdown = () => {
+    setShowDropdown(!showDropdown);
+  };
+
   return (
     <div>
       {!accountAddress ? (
@@ -237,6 +244,20 @@ export default function AccountPage() {
           ) : (
             <p>No transactions found.</p>
           )}
+          <div>
+            <button onClick={handleToggleDropdown}>
+              Token Holdings: {tokenHoldings.length}
+            </button>
+            {showDropdown && (
+              <ul>
+                {tokenHoldings.map((token, index) => (
+                  <li key={index}>
+                    {token.name} - {token.token_address}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
   <TokenTabs selectedTab={selectedTab} onSelectTab={setSelectedTab} />
           {renderTable()}
         </>

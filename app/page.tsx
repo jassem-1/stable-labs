@@ -1,9 +1,8 @@
-"use client";
+"use client";;
 import { useContext, useState } from "react";
 import { EtherscanContext } from "./RootLayoutContext";
 import { ethers } from "ethers";
 import Link from "next/link";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
@@ -107,7 +106,7 @@ export default function Home() {
                 <div>
                   <p>
                     Miner:{' '}
-                    <Link href={`/account?miner=${el.miner}`}>
+                    <Link href={`/account/${el.miner}`}>
                       {el.miner.slice(0, 35)}...
                     </Link>
                   </p>
@@ -121,7 +120,6 @@ export default function Home() {
                 </div>
                 <div>
                   <p>Base Fee: {convertIntoETH(el.baseFeePerGas)} ETH</p>
-                  <Image src="/path/to/etherLogo.png" alt="Ether logo" width={40} height={40} />
                 </div>
               </div>
             </div>
