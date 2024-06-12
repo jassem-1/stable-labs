@@ -1,38 +1,54 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { ethers } from 'ethers';
-
+import { FaEthereum } from 'react-icons/fa';
+import { MdAttachMoney } from 'react-icons/md';
+import { BiStats } from 'react-icons/bi';
+import loaderUrl from "../../assets/loader.gif";
 const MarketCap = () => {
   const [totalSupply, setTotalSupply] = useState('');
   const [currentPrice, setCurrentPrice] = useState('');
   const [marketCap, setMarketCap] = useState('');
+  const [loadingSupply, setLoadingSupply] = useState(true);
+  const [loadingPrice, setLoadingPrice] = useState(true);
+  const [loadingCap, setLoadingCap] = useState(true);
 
   useEffect(() => {
     const fetchTotalSupply = async () => {
-      const API_ETHER_KEY = "DXIGPJTP9BMKHIGVTCEJG3PF3MXEXU1GXI";
+      setLoadingSupply(true);
       try {
+        const API_ETHER_KEY = "DXIGPJTP9BMKHIGVTCEJG3PF3MXEXU1GXI";
         const response = await axios.get(
           `https://api.etherscan.io/api?module=stats&action=ethsupply&apikey=${API_ETHER_KEY}`
         );
         if (response.data.status === "1" && response.data.result) {
           const supply = ethers.formatEther(response.data.result);
           setTotalSupply(supply);
+        } else {
+          setTotalSupply('Failed to fetch data');
         }
       } catch (error) {
-        console.error("Error fetching total Ether supply:", error);
+        setTotalSupply('Failed to fetch data');
+      } finally {
+        setLoadingSupply(false);
       }
     };
 
     const fetchCurrentPrice = async () => {
+      setLoadingPrice(true);
       try {
         const response = await axios.get(
           'https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd'
         );
         if (response.data.ethereum.usd) {
           setCurrentPrice(response.data.ethereum.usd);
+        } else {
+          setCurrentPrice('Failed to fetch data');
         }
       } catch (error) {
-        console.error("Error fetching Ethereum price:", error);
+        setCurrentPrice('Failed to fetch data');
+      } finally {
+        setLoadingPrice(false);
       }
     };
 
@@ -41,19 +57,38 @@ const MarketCap = () => {
   }, []);
 
   useEffect(() => {
-    if (totalSupply && currentPrice ) {
+    if (totalSupply && currentPrice) {
+      setLoadingCap(true);
       const cap = parseFloat(totalSupply) * Number(currentPrice);
       setMarketCap(cap.toFixed(2));
+      setLoadingCap(false);
     }
   }, [totalSupply, currentPrice]);
 
   return (
-    <div>
-      <h1>Ethereum Market Cap</h1>
-      <p>Total Supply: {totalSupply} ETH</p>
-      <p>Current Price: ${currentPrice} USD</p>
-      <p>Market Cap: ${marketCap} USD</p>
+    <div className="p-5 grid grid-cols-3 gap-4">
+    <div className="bg-white p-4 shadow rounded-lg flex items-center space-x-3">
+      <FaEthereum className="text-gray-700 text-3xl" />
+      <div>
+        <h2 className="font-semibold text-lg">Total Supply</h2>
+        {loadingSupply ? <img src={loaderUrl.src} alt="Loading..." className="w-10 h-10"/> : <p>{totalSupply} ETH</p>}
+      </div>
     </div>
+    <div className="bg-white p-4 shadow rounded-lg flex items-center space-x-3">
+      <MdAttachMoney className="text-green-600 text-3xl" />
+      <div>
+        <h2 className="font-semibold text-lg">Current Price</h2>
+        {loadingPrice ? <img src={loaderUrl.src} alt="Loading..." className="w-10 h-10"/> : <p>${currentPrice} USD</p>}
+      </div>
+    </div>
+    <div className="bg-white p-4 shadow rounded-lg flex items-center space-x-3">
+      <BiStats className="text-blue-500 text-3xl" />
+      <div>
+        <h2 className="font-semibold text-lg">Market Cap</h2>
+        {loadingCap ? <img src={loaderUrl.src} alt="Loading..." className="w-10 h-10"/> : <p>${marketCap} USD</p>}
+      </div>
+    </div>
+  </div>
   );
 };
 
