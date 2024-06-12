@@ -25,11 +25,23 @@ interface EtherscanContextProps {
 
 }
 
-const infuraApiKey = process.env.NEXT_PUBLIC_INFURA_API_KEY;
+const infuraApiKeys = [
+  process.env.NEXT_PUBLIC_INFURA_API_KEY, // Your first Infura API key
+  process.env.NEXT_PUBLIC_INFURA_API_KEY_SECOND // Your second Infura API key
+];
 
-if (!infuraApiKey) {
-  throw new Error("Infura API key is not defined");
+if (!infuraApiKeys[0] || !infuraApiKeys[1]) {
+  throw new Error("Infura API keys are not defined");
 }
+let lastUsedIndex = 0;
+
+function getNextApiKey() {
+  const apiKey = infuraApiKeys[lastUsedIndex];
+  lastUsedIndex = (lastUsedIndex + 1) % infuraApiKeys.length; 
+  return apiKey;
+}
+const infuraApiKey = getNextApiKey();
+
 
 const provider = new ethers.JsonRpcProvider(
   `https://mainnet.infura.io/v3/${infuraApiKey}`
@@ -51,6 +63,9 @@ const EtherProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   const [transactionDetails, setTransactionDetails] = useState<TransactionResponse | null>(null);
   const [blockDetails, setBlockDetails] = useState<Block | null>(null);
+
+  
+
   const accountDetails = async () => {
     try {
       const getCurrentBlock = await provider.getBlockNumber();

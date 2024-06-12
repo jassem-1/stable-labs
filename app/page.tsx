@@ -4,6 +4,8 @@ import { EtherscanContext } from "./RootLayoutContext";
 import { ethers } from "ethers";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import FetchFinalizedBlock from "./components/eth_data/FinalizedBlock";
+import MarketCap from "./components/eth_data/MarketCap";
 
 export default function Home() {
   const router = useRouter();
@@ -15,25 +17,7 @@ export default function Home() {
     return ETH;
   };
 
-/*   const accountAddress = (event: React.FormEvent) => {
-    event.preventDefault();
-    const element = document.getElementById(
-      "accountAddress"
-    ) as HTMLInputElement;
 
-    if (element) {
-      const address = element.value.trim();
-      if (address) {
-        setUserAccount(address);
-        router.push(`/account/${address}`);
-        element.value = "";
-      } else {
-        console.error("No address provided");
-      }
-    } else {
-      console.error("Element not found");
-    }
-  }; */
 
   const handleSearch = (event: React.FormEvent) => {
     event.preventDefault();
@@ -73,6 +57,8 @@ export default function Home() {
 
   return (
     <div className=" py-16 ">
+      <FetchFinalizedBlock/>
+      <MarketCap/>
       <div className="bg-gray-100 p-5">
       <form className="flex flex-col space-y-4" onSubmit={handleSearch}>
           <input
