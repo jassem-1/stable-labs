@@ -41,7 +41,7 @@ const FetchFinalizedBlock = () => {
   }, []);
 
   return (
-    <div className="bg-black bg-opacity-30 text-white rounded-lg shadow-lg blur-background flex items-center space-x-3">
+    <div className="bg-black bg-opacity-30 p-3 text-white rounded-lg shadow-lg blur-background flex items-center space-x-3">
       <MdAccessTime className="text-blue-500 text-3xl" /> {/* Time icon */}
       <div className="flex-grow">
         <h1 className="text-lg font-semibold">Last Finalized Block</h1>

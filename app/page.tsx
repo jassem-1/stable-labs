@@ -83,14 +83,14 @@ export default function Home() {
       <div className="py-16 text-white max-w-6xl justify-center items-start  mx-auto flex gap-x-4">
       <div className="w-1/2 p-4 bg-black bg-opacity-40 text-white rounded-lg shadow-lg blur-background  ">
         <h3 className="text-lg  text-white font-semibold my-2">Latest Blocks</h3>
-        <div className="max-h-96 min-w-[40%] overflow-y-auto space-y-4 p-2  ">
+        <div className="max-h-96 min-w-[40%] overflow-y-auto scrollable space-y-4 p-2  ">
     
           {tenBlockWithDetails.slice(0, 6).map((el, i) => (
             <div key={i + 1} className=" hover:border hover:border-white shadow-lg p-5 rounded-2xl">
               <div className="flex flex-col space-y-2">
                 <p className="text-white">
                   <Link href={`/block/${el.number.toString()}`}>
-                  <span className="rounded-xl bg-opacity-30 bg-black p-1">Block Number:</span> Block Number:
+                  <span className="rounded-xl bg-opacity-30 bg-black p-1">Block Number:</span>
                    <span className="text-[#00ffffbf]">{el.number}</span> 
                   </Link>
                 </p>
@@ -121,7 +121,7 @@ export default function Home() {
 
       <div className="w-1/2 p-4 bg-black bg-opacity-40 text-white rounded-lg shadow-lg blur-background ">
         <h3 className="  text-lg font-bold my-2">Latest Transactions</h3>
-        <div className="max-h-96 overflow-y-auto space-y-4 p-2  rounded-lg">
+        <div className="max-h-96 scrollable overflow-y-auto space-y-4 p-2  rounded-lg">
           {transaction?.transactions.slice(0, 6).map((txHash, i) => (
             <div key={i} className=" shadow-lg p-2 rounded-lg">
               <div className="flex justify-between">

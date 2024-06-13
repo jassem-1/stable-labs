@@ -66,7 +66,7 @@ const MarketCap = () => {
   }, [totalSupply, currentPrice]);
 
   return (
-    <div className=" py-4 grid grid-cols-3 gap-4">
+    <div className=" py-4 grid grid-cols-3 p-3 gap-4">
       <div className="bg-black bg-opacity-30 text-white rounded-lg shadow-lg blur-background flex items-center space-x-3">
         <FaEthereum className="text-gray-700 text-3xl" />
         <div>
@@ -78,7 +78,7 @@ const MarketCap = () => {
           )}
         </div>
       </div>
-      <div className="bg-black bg-opacity-30 text-white rounded-lg shadow-lg blur-background flex items-center space-x-3">
+      <div className="bg-black bg-opacity-30 p-3 text-white rounded-lg shadow-lg blur-background flex items-center space-x-3">
         <MdAttachMoney className="text-green-600 text-3xl" />
         <div>
           <h2 className="font-semibold text-lg">Current Price</h2>
@@ -89,7 +89,7 @@ const MarketCap = () => {
           )}
         </div>
       </div>
-      <div className="bg-black bg-opacity-30 text-white rounded-lg shadow-lg blur-background flex items-center space-x-3">
+      <div className="bg-black bg-opacity-30 p-3 text-white rounded-lg shadow-lg blur-background flex items-center space-x-3">
         <BiStats className="text-blue-500 text-3xl" />
         <div>
           <h2 className="font-semibold text-lg">Market Cap</h2>

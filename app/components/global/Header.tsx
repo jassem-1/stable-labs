@@ -60,7 +60,10 @@ const Header: React.FC = () => {
           </Link>
         </div>
         <div className="flex items-center gap-x-8 cursor-pointer">
+          <Link href="/login">
           <button className="px-4 rounded-2xl text-sm border border-white text-white hover:scale-110">login</button>
+
+          </Link>
         </div>
       </div>
       <div className="neon my-4"></div>
