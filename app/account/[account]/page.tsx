@@ -1,4 +1,4 @@
-"use client";;
+"use client";
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import { getBalance } from "viem/actions";
@@ -8,8 +8,7 @@ import TokenTable from "../components/RenderTable";
 import TokenTabs from "../components/TokenTabs";
 import Moralis from "moralis";
 import { EvmChain } from "@moralisweb3/common-evm-utils";
-import { FaSpinner } from "react-icons/fa";
-
+import { FaAngleDown, FaAngleUp, FaSpinner } from "react-icons/fa";
 
 type TokenTransaction = {
   blockNumber: string;
@@ -35,14 +34,17 @@ let isMoralisStarted = false;
 export default function AccountPage() {
   const [accountAddress, setAccountAddress] = useState("");
   const [transactionHashes, setTransactionHashes] = useState<string[]>([]);
-  const [values, setValues] = useState<string[]>([]);
 
   const [selectedTab, setSelectedTab] = useState('ERC-20');
+  const [showTransactionDropdown, setShowTransactionDropdown] = useState(false);
+  const [currentTransactionPage, setCurrentTransactionPage] = useState(1);
 
-   const [isLoading, setIsLoading] = useState(false);
-   const [tokenHoldings, setTokenHoldings] = useState<any[]>([]);
-   const [showDropdown, setShowDropdown] = useState(false);
- 
+  const [isLoading, setIsLoading] = useState(false);
+  const [tokenHoldings, setTokenHoldings] = useState<any[]>([]);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const itemsPerPage = 7;
 
   const [balance, setBalance] = useState("0");
   const [erc20Transactions, setErc20Transactions] = useState<
@@ -54,6 +56,7 @@ export default function AccountPage() {
   const [erc1155Transactions, setErc1155Transactions] = useState<
     TokenTransaction[]
   >([]);
+
   useEffect(() => {
     const path = window.location.pathname;
     const parts = path.split("/");
@@ -95,7 +98,7 @@ export default function AccountPage() {
     setIsLoading(true)
     try {
       const response = await axios.get(
-        `https://api.etherscan.io/api?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&page=1&offset=10&sort=asc&apikey=${API_ETHER_KEY}`
+        `https://api.etherscan.io/api?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&page=1&offset=30&sort=asc&apikey=${API_ETHER_KEY}`
       );
       if (response.data.status === "1" && response.data.result) {
         const transactions = response.data.result.map((tx: any) => ({
@@ -224,66 +227,148 @@ export default function AccountPage() {
         return null;
     }
   };
+  const handleToggleTransactionDropdown = () => {
+    setShowTransactionDropdown(!showTransactionDropdown);
+  };
 
   const handleToggleDropdown = () => {
     setShowDropdown(!showDropdown);
   };
+
+  const paginate = (items: any[], pageNumber: number, pageSize: number) => {
+    const startIndex = (pageNumber - 1) * pageSize;
+    return items.slice(startIndex, startIndex + pageSize);
+  };
+
+  const nextTransactionPage = () => {
+    if (currentTransactionPage * itemsPerPage < transactionHashes.length) {
+      setCurrentTransactionPage(currentTransactionPage + 1);
+    }
+  };
+
+  const previousTransactionPage = () => {
+    if (currentTransactionPage > 1) {
+      setCurrentTransactionPage(currentTransactionPage - 1);
+    }
+  };
+  const nextPage = () => {
+    if (currentPage * itemsPerPage < tokenHoldings.length) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const previousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center">
         <FaSpinner className="animate-spin text-4xl text-white" />
-        
       </div>
     );
   }
 
-
   return (
     <div className="p-16">
- <div className="bg-black bg-opacity-30 text-white rounded-lg  blur-background shadow-lg p-6">
-      {!accountAddress ? (
-        <div>
-                  <FaSpinner className="animate-spin text-4xl text-white" />
-
-          Loading account details...</div>
-      ) : (
-        <>
-          <h1>Account Details for {accountAddress}</h1>
-          <p>Balance: {balance} ETH</p>
-          <h3>Recent Transactions</h3>
-          {isLoading ? (
-            <p>Loading transactions...</p>
-          ) : transactionHashes.length > 0 ? (
-            <ul className="space-y-4 p-2 ">
-             {transactionHashes.map((transaction:any, index) => (
-                        <li key={index}>
-                            Hash: {transaction.hash}, Value: {ethers.formatEther(transaction.value)} ETH
-                        </li>
-                    ))}
-            </ul>
-          ) : (
-            <p>No transactions found.</p>
-          )}
+      <div className=" bg-black bg-opacity-30 text-white rounded-lg  blur-background shadow-lg p-6">
+        {!accountAddress ? (
           <div>
-            <button onClick={handleToggleDropdown}>
-              Token Holdings: {tokenHoldings.length}
-            </button>
-            {showDropdown && (
-              <ul>
-                {tokenHoldings.map((token, index) => (
-                  <li key={index}>
-                    {token.name} - {token.token_address}
-                  </li>
-                ))}
-              </ul>
-            )}
+            <FaSpinner className="animate-spin text-4xl text-white" />
+            Loading account details...
           </div>
-  <TokenTabs selectedTab={selectedTab} onSelectTab={setSelectedTab} />
-          {renderTable()}
-        </>
-      )}
+        ) : (
+          <>
+            <h1>Account Details for {accountAddress}</h1>
+            <p>Balance: {balance} ETH</p>
+            <div className="w-full flex items-start gap-x-3">
+            <div className="p-3 min-h-[450px] relative w-full bg-black bg-opacity-70 blur-background rounded-lg">
+              <div className="flex justify-between w-full items-center gap-x-2 mb-2  text-[#0ff]" onClick={handleToggleTransactionDropdown}>
+                <button>
+                  Recent Transactions: {transactionHashes.length}
+                </button>
+                {
+                  showTransactionDropdown ? <FaAngleUp /> : <FaAngleDown />
+                }
+              </div>
+              {showTransactionDropdown && (
+                <>
+                  {isLoading ? (
+                    <p>Loading transactions...</p>
+                  ) : transactionHashes.length > 0 ? (
+                    <ul className="space-y-4 max-w-[650px] p-2">
+                      {paginate(transactionHashes, currentTransactionPage, itemsPerPage).map((transaction: any, index) => (
+                        <li key={index}>
+                          Hash: {transaction.hash.substring(0, 14)}..., Value: {ethers.formatEther(transaction.value)} ETH
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p>No transactions found.</p>
+                  )}
+                  <div className="flex absolute bottom-3 right-3 w-[95%] justify-between">
+                    <button onClick={previousTransactionPage} disabled={currentTransactionPage === 1} className="border border-white p-2 rounded-2xl">
+                      Previous
+                    </button>
+                    <button onClick={nextTransactionPage} disabled={currentTransactionPage * itemsPerPage >= transactionHashes.length} className="border border-white p-2 rounded-2xl">
+                      Next
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+            <div className="relative p-3 w-full min-h-[450px] bg-black bg-opacity-70 blur-background rounded-lg">
+              <div className="flex justify-between w-full items-center gap-x-2 mb-2  text-[#0ff]"  onClick={handleToggleDropdown}>
+              <button>
+                Token Holdings: {tokenHoldings.length} 
+
+              </button>
+              {
+                showDropdown ? <div>
+                  <FaAngleUp />
+                  </div> : 
+                <div>
+                  <FaAngleDown />
+
+                </div>
+              }
+            
+              </div>
+             
+              {showDropdown && (
+                <div className="w-full">
+                  <ul>
+                    {paginate(tokenHoldings, currentPage, itemsPerPage).map((token, index) => (
+                      <li key={index} className=" px-3 py-3 ">
+                        {token.name} - {token.token_address}
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="flex px-4 right-1 w-full justify-between absolute bottom-3">
+                    <button onClick={previousPage} disabled={currentPage === 1} className="border border-white p-2 rounded-2xl">
+                      Previous
+                    </button>
+                    <button onClick={nextPage} disabled={currentPage * itemsPerPage >= tokenHoldings.length} className="border border-white p-2 rounded-2xl">
+                      Next
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+            </div>
+            
+           
+           
+            <div className="border mt-4 border-white rounded-2xl p-4">
+            <TokenTabs selectedTab={selectedTab} onSelectTab={setSelectedTab} />
+            {renderTable()}
+            </div>
+           
+          </>
+        )}
+      </div>
     </div>
-    </div>
-   
   );
 }

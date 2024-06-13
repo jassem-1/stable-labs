@@ -7,21 +7,21 @@ type Props = {
 
 const TokenTabs: React.FC<Props> = ({ selectedTab, onSelectTab }) => {
   return (
-    <div className="tabs">
+    <div className=" text-white  rounded-lg bg-transparent p-3">
       <button
-        className={`tab ${selectedTab === 'ERC-20' ? 'active' : ''}`}
+        className={`tab   ${selectedTab === 'ERC-20' ? 'active' : ''}`}
         onClick={() => onSelectTab('ERC-20')}
       >
         ERC-20
       </button>
       <button
-        className={`tab ${selectedTab === 'ERC-721' ? 'active' : ''}`}
+        className={`tab    ${selectedTab === 'ERC-721' ? 'active' : ''}`}
         onClick={() => onSelectTab('ERC-721')}
       >
         ERC-721
       </button>
       <button
-        className={`tab ${selectedTab === 'ERC-1155' ? 'active' : ''}`}
+        className={`tab    ${selectedTab === 'ERC-1155' ? 'active' : ''}`}
         onClick={() => onSelectTab('ERC-1155')}
       >
         ERC-1155
@@ -34,13 +34,14 @@ const TokenTabs: React.FC<Props> = ({ selectedTab, onSelectTab }) => {
         }
         .tab {
           padding: 10px 20px;
-          background: #f0f0f0;
-          border: none;
+        border:none;
           cursor: pointer;
         }
         .tab.active {
-          background: #0070f3;
-          color: white;
+          background: none;
+          color: #0ff ;
+          text-decoration: underline;
+          
         }
       `}</style>
     </div>

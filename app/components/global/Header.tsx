@@ -1,54 +1,45 @@
 "use client";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { ImSpinner2 } from 'react-icons/im'; // Import a spinner icon
+import { ImSpinner2 } from 'react-icons/im';
 import ConnectWalletButton from "../ConnectWallet";
 import Link from "next/link";
 import logo from "../../assets/logo.png";
-import { User } from '@supabase/supabase-js'; // Adjust this path as needed to correctly import your configured Supabase client
+import { User } from '@supabase/supabase-js';
 import { createClient } from "@/utils/supabase/client";
 
 const Header: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
-
+  const [isLoggingIn, setIsLoggingIn] = useState(false); 
 
   const [price, setPrice] = useState("");
-  const [priceLoading, setPriceLoading] = useState(true); // Loading state for price
+  const [priceLoading, setPriceLoading] = useState(true); 
   const [updatedPriceDate, setUpdatedPriceDate] = useState("");
   const [gasPrice, setGasPrice] = useState("");
-  const [gasPriceLoading, setGasPriceLoading] = useState(true); // Loading state for gas price
+  const [gasPriceLoading, setGasPriceLoading] = useState(true); 
 
   const supabase = createClient();
- 
 
   useEffect(() => {
-    // Initialize the listener for auth state changes
-    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
-      console.log("Auth event:", event); // Optional: Log the event type
-      if (session) {
-        setUser(session.user);
+    const fetchUserSession = async () => {
+      const { data, error } = await supabase.auth.getSession();
+      if (error) {
+        console.error('Error fetching user session:', error);
       } else {
-        setUser(null);
+        setUser(data.session?.user || null);
+        setLoading(false);
       }
-    });
-
-    (async () => {
-      const currentSession = await supabase.auth.getSession();
-      if (currentSession?.data?.session) {
-        setUser(currentSession.data.session.user);
-      }
-    })();
-    // Cleanup the listener when the component unmounts
-    return () => {
-      authListener.subscription.unsubscribe();
     };
+
+    fetchUserSession();
   }, []);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
+    setUser(null);
   };
-  
+
   const getEtherPrice = () => {
     setPriceLoading(true); // Start loading
     const API_ETHER_KEY = "DCBMMRGDHRZ9ZAXN9F98II2JQ2GREDSG29";
@@ -86,7 +77,7 @@ const Header: React.FC = () => {
     getEtherPrice();
     getGasPrice();
   }, []);
-  
+
   return (
     <div className=" w-full  bg-transparent shadow-lg px-8 py-2 z-20">
       <div className="flex justify-between items-center w-full ">
@@ -96,16 +87,20 @@ const Header: React.FC = () => {
           </Link>
         </div>
         <div className="flex items-center gap-x-8 cursor-pointer">
-        {user ? (
+          {user ? (
             <button onClick={handleLogout} className="px-4 rounded-2xl text-sm border border-white text-white hover:scale-110">
               Logout
             </button>
           ) : (
-            <Link href="/login">
-              <button className="px-4 rounded-2xl text-sm border border-white text-white hover:scale-110">
-                Login
-              </button>
-            </Link>
+            isLoggingIn ? (
+              <ImSpinner2 className="animate-spin text-white" />
+            ) : (
+              <Link href="/login">
+                <button className="px-4 rounded-2xl text-sm border border-white text-white hover:scale-110">
+                  Login
+                </button>
+              </Link>
+            )
           )}
         </div>
       </div>

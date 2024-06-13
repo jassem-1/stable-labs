@@ -20,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-    <body className={`${inter.className} background`}>
+    <body className={`${inter.className} background max-w-[1600px]`}>
       <Header />
       <RootLayoutClient>
         <div className="pt-0 px-16">

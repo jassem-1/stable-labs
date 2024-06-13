@@ -5,6 +5,7 @@ import { Block, TransactionResponse } from "ethers";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { WagmiProvider } from 'wagmi';
 import { config } from "./wagmi_config/config";
+import { User } from "@supabase/supabase-js";
 
 const queryClient = new QueryClient()
 
@@ -60,7 +61,8 @@ const EtherProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   const [transactionDetails, setTransactionDetails] = useState<TransactionResponse | null>(null);
   const [blockDetails, setBlockDetails] = useState<Block | null>(null);
-
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   
 
   const accountDetails = async () => {

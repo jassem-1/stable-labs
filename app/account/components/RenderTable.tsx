@@ -44,57 +44,57 @@ const TokenTable: React.FC<Props> = ({ transactions, tokenType }) => {
   };
 
   return (
-    <div>
+    <div className="w-full">
       {currentTransactions.length > 0 ? (
         <>
-          <table className="min-w-2/3 divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+          <table className="w-full divide-y divide-gray-200">
+            <thead className="bg-transparent">
               <tr>
                 <th
                   scope="col"
-                  className="px-2 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider"
+                  className="px-2 py-3 text-left text-sm font-medium text-white uppercase tracking-wider"
                 >
                   Transaction Hash
                 </th>
                 <th
                   scope="col"
-                  className="px-2 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider"
+                  className="px-2 py-3 text-left text-sm font-medium text-white uppercase tracking-wider"
                 >
                   Block
                 </th>
                 <th
                   scope="col"
-                  className="px-2 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider"
+                  className="px-2 py-3 text-left text-sm font-medium text-white uppercase tracking-wider"
                 >
                   Age
                 </th>
                 <th
                   scope="col"
-                  className="px-2 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider"
+                  className="px-2 py-3 text-left text-sm font-medium text-white uppercase tracking-wider"
                 >
                   From
                 </th>
                 <th
                   scope="col"
-                  className="px-2 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider"
+                  className="px-2 py-3 text-left text-sm font-medium text-white uppercase tracking-wider"
                 >
                   To
                 </th>
                 <th
                   scope="col"
-                  className="px-2 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider"
+                  className="px-2 py-3 text-left text-sm font-medium text-white uppercase tracking-wider"
                 >
                   Value
                 </th>
                 <th
                   scope="col"
-                  className="px-2 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider"
+                  className="px-2 py-3 text-left text-sm font-medium text-white uppercase tracking-wider"
                 >
                   Token
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="w-full bg-black bg-opacity-40 text-[#0ff] divide-y divide-gray-200">
               {currentTransactions.map((tx, index) => (
                 <tr key={index}>
                   <td
@@ -222,11 +222,11 @@ const TokenTable: React.FC<Props> = ({ transactions, tokenType }) => {
             />
           ))}
 
-          <div className="flex justify-between mt-4 w-1/3">
+          <div className="w-full flex justify-between mt-4 ">
             <button
               onClick={handlePreviousPage}
               disabled={currentPage === 1}
-              className="px-4 py-2 bg-gray-200 rounded"
+              className="px-4 py-2 bg-transparent border border-white rounded"
             >
               Previous
             </button>
@@ -239,7 +239,7 @@ const TokenTable: React.FC<Props> = ({ transactions, tokenType }) => {
               disabled={
                 currentPage === Math.ceil(transactions.length / rowsPerPage)
               }
-              className="px-4 py-2 bg-gray-200 rounded"
+              className="px-4 py-2 bg-transparent border border-white rounded"
             >
               Next
             </button>
