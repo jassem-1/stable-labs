@@ -32,7 +32,6 @@ const BlockPage = () => {
     return <div>No block details available.</div>;
   }
 
-  const baseFeePerGas = blockDetails.baseFeePerGas || 0; 
 
   return (
     <div className="max-w-4xl mx-auto mt-10 p-5 bg-gray-800 text-white rounded-lg shadow-lg">

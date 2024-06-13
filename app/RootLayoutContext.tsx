@@ -5,11 +5,10 @@ import { Block, TransactionResponse } from "ethers";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { WagmiProvider } from 'wagmi';
 import { config } from "./wagmi_config/config";
+
 const queryClient = new QueryClient()
 
-
 interface EtherscanContextProps {
-  data: string;
   currentBlock: number[];
   topTenBlock: number[];
   provider: ethers.JsonRpcProvider;
@@ -18,7 +17,6 @@ interface EtherscanContextProps {
   tenBlockWithDetails: any[];  
   transactionDetails: TransactionResponse | null;
   getTransactionDetails: (txHash: string) => Promise<TransactionResponse | null>;
-  
   blockDetails: Block | null;
 
   getBlockDetails: (blockNumber: number) => Promise<Block | null>;
@@ -26,8 +24,8 @@ interface EtherscanContextProps {
 }
 
 const infuraApiKeys = [
-  process.env.NEXT_PUBLIC_INFURA_API_KEY, // Your first Infura API key
-  process.env.NEXT_PUBLIC_INFURA_API_KEY_SECOND // Your second Infura API key
+  process.env.NEXT_PUBLIC_INFURA_API_KEY,
+  process.env.NEXT_PUBLIC_INFURA_API_KEY_SECOND
 ];
 
 if (!infuraApiKeys[0] || !infuraApiKeys[1]) {
@@ -51,7 +49,6 @@ const EtherscanContext = createContext<EtherscanContextProps | undefined>(
 );
 
 const EtherProvider: FC<{ children: ReactNode }> = ({ children }) => {
-  const data = "Etherscan Context test";
 
   const [currentBlock, setCurrentBlock] = useState<number[]>([]);
   const [transaction, setTransaction] = useState<Block | null>(null);
@@ -129,7 +126,7 @@ const EtherProvider: FC<{ children: ReactNode }> = ({ children }) => {
   }, []);
 
   return (
-    <EtherscanContext.Provider value={{ data, currentBlock, topTenBlock, provider, gasPrice, transaction, tenBlockWithDetails, transactionDetails, getTransactionDetails, blockDetails, getBlockDetails }}>
+    <EtherscanContext.Provider value={{  currentBlock, topTenBlock, provider, gasPrice, transaction, tenBlockWithDetails, transactionDetails, getTransactionDetails, blockDetails, getBlockDetails }}>
       {children}
     </EtherscanContext.Provider>
   );

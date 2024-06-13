@@ -59,7 +59,7 @@ const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({
   return (
     <div>
       <button
-      className={"px-2 py-3 bg-[#1FC7D4] flex justify-center font-semibold text-white text-lg hover:bg-blue-700 rounded-full "}
+      className="px-2 py-1 flex justify-center hover:border hover:border-white font-semibold text-white text-sm hover:bg-transparent rounded-full "
       onClick={connectWallet}
       onMouseEnter={(handleMouseEnter)}
       onMouseLeave={handleMouseLeave}
@@ -67,7 +67,7 @@ const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({
       {account ? `Acc: ${account.substring(0, 6)}...${account.substring(account.length - 4)}, Balance: ${balance} ETH` : buttonText}
     </button>
     {isModalVisible && account && (
-        <div className="absolute flex flex-col justify-center items-start break-words bg-white border border-black rounded-2xl p-3 w-52 " >
+        <div className="absolute flex flex-col justify-center items-start break-words bg-black bg-opacity-45 border border-black rounded-2xl p-3 w-52 " >
           <p className="break-all">Account: {account}</p>
           <p>Balance: {balance} ETH</p>
         </div>

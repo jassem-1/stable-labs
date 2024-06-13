@@ -1,3 +1,37 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Exo:ital,wght@0,100..900;1,100..900&display=swap');
+.exo-light {
+  font-family: "Exo", sans-serif;
+  font-weight: 300;
+}
+.exo-semibold {
+  font-family: "Exo", sans-serif;
+  font-weight: 500;
+}
+
+.exo-bold {
+  font-family: "Exo", sans-serif;
+  font-weight: 700;
+}
+.background {
+  background-image: url('https://img.freepik.com/free-photo/fantasy-style-galaxy-background_23-2151114287.jpg?t=st=1718236733~exp=1718240333~hmac=86675599077e9b5f737aae7d421f3581a8bb91c88d3f3448c73eeb6c50a19d05&w=1060');
+  background-size: cover; /* Cover the entire container */
+  background-position: center; /* Center the background image */
+}
+
+.neon {
+    height: 2px;
+    background-color: #0ff; /* Cyan for neon color */
+    box-shadow: 0 0 5px rgba(0, 255, 255, 0.75),
+                0 0 10px rgba(0, 255, 255, 0.75),
+                0 0 20px rgba(0, 255, 255, 0.75),
+                0 0 40px #0ff,
+                0 0 80px #0ff,
+                0 0 90px #0ff;
+  }
+  .blur-background {
+    backdrop-filter: blur(5px); /* Adjust the blur amount (in pixels) as needed */
+
+  }

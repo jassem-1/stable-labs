@@ -12,7 +12,7 @@ const TransactionPage = () => {
 
   useEffect(() => {
     const pathSegments = window.location.pathname.split('/');
-    const id = pathSegments[pathSegments.length - 1]; // Get the last segment
+    const id = pathSegments[pathSegments.length - 1]; 
     if (id && transactionId !== id) {
       setTransactionId(id);
       console.log("Retrieved Transaction ID:", id);
@@ -35,8 +35,8 @@ const TransactionPage = () => {
 
 
   return (
-    <div className="max-w-4xl mx-auto mt-10 p-5 bg-gray-900 text-white rounded-lg shadow-lg">
-    <h1 className="text-3xl font-bold mb-5">Transaction Hash: {transactionId}</h1>
+    <div className="max-w-4xl mx-auto mt-10 p-5 bg-black bg-opacity-30 text-white rounded-lg shadow-lg blur-background">
+    <h1 className="text-xl font-bold mb-5 break-words">Transaction Hash: {transactionId}</h1>
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <span className="font-semibold">Block:</span>

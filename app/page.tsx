@@ -1,16 +1,16 @@
 "use client";;
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { EtherscanContext } from "./RootLayoutContext";
 import { ethers } from "ethers";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import FetchFinalizedBlock from "./components/eth_data/FinalizedBlock";
 import MarketCap from "./components/eth_data/MarketCap";
+import { MdSearch } from 'react-icons/md';
 
 export default function Home() {
   const router = useRouter();
   const context = useContext(EtherscanContext);
-  const [userAccount, setUserAccount] = useState<string>("");
 
   const convertIntoETH = (amount: any) => {
     const ETH = ethers.formatUnits(amount, "ether");
@@ -57,31 +57,36 @@ export default function Home() {
 
   return (
     <div className=" py-16 ">
+      <div className="px-3">
       <FetchFinalizedBlock/>
       <MarketCap/>
-      <div className="bg-gray-100 p-5">
-      <form className="flex flex-col space-y-4" onSubmit={handleSearch}>
+      </div>
+      
+      <div className="w-full bg-black bg-opacity-30 text-white rounded-lg shadow-lg blur-background p-5">
+      <form className="flex gap-x-3" onSubmit={handleSearch}>
           <input
             type="text"
             placeholder="Search by Account Address, Block Number, or Transaction Hash"
             id="searchInput"
-            className="p-2 border border-gray-300 rounded"
+            className="p-2 border w-[90%] border-gray-300 bg-transparent rounded"
           />
-          <button
-            type="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Search
-          </button>
+             <button
+      type="submit"
+      className="flex items-center justify-center border border-white text-white font-bold py-2 px-4 rounded"
+    >
+      <MdSearch className="mr-2" />
+      Search
+    </button>
         </form>
       </div>
 
-      <div className="py-16 max-w-6xl mx-auto flex gap-x-4">
-      <div className="mt-10">
-        <h3 className="text-lg font-bold my-2">Latest Blocks</h3>
-        <div className="max-h-96 overflow-y-auto space-y-4 p-2 border border-gray-300 rounded-lg">
+      <div className="py-16 text-white max-w-6xl justify-center items-start  mx-auto flex gap-x-4">
+      <div className="w-1/2 p-4 bg-black bg-opacity-30 text-white rounded-lg shadow-lg blur-background  ">
+        <h3 className="text-lg  font-semibold my-2">Latest Blocks</h3>
+        <div className="max-h-96 min-w-[40%] overflow-y-auto space-y-4 p-2 border ">
+    
           {tenBlockWithDetails.slice(0, 6).map((el, i) => (
-            <div key={i + 1} className="bg-white shadow-lg p-5 rounded-lg">
+            <div key={i + 1} className=" shadow-lg p-5 rounded-lg">
               <div className="flex flex-col space-y-2">
                 <p className="text-blue-600">
                   <Link href={`/block/${el.number.toString()}`}>
@@ -113,11 +118,11 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="mt-10">
+      <div className="w-1/2 p-4 bg-black bg-opacity-30 text-white rounded-lg shadow-lg blur-background ">
         <h3 className="text-lg font-bold my-2">Latest Transactions</h3>
         <div className="max-h-96 overflow-y-auto space-y-4 p-2 border border-gray-300 rounded-lg">
           {transaction?.transactions.slice(0, 6).map((txHash, i) => (
-            <div key={i} className="bg-white shadow-lg p-5 rounded-lg">
+            <div key={i} className=" shadow-lg p-5 rounded-lg">
               <div className="flex justify-between">
                 <p className="text-blue-600">
                   <Link href={`/transaction/${txHash}`}>
