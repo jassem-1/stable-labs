@@ -281,10 +281,13 @@ export default function AccountPage() {
           </div>
         ) : (
           <>
-            <h1>Account Details for {accountAddress}</h1>
-            <p>Balance: {balance} ETH</p>
+          <div className="flex flex-col gap-y-2 pb-3">
+          <h1 >Account Details for {accountAddress}</h1>
+          <p className="border border-white  rounded-2xl w-[250px] text-white  p-2 ">Balance: {balance} ETH</p>
+          </div>
+          
             <div className="w-full flex items-start gap-x-3">
-            <div className="p-3 min-h-[450px] relative w-full bg-black bg-opacity-70 blur-background rounded-lg">
+            <div className="p-3  relative w-full bg-black bg-opacity-70 blur-background rounded-lg">
               <div className="flex justify-between w-full items-center gap-x-2 mb-2  text-[#0ff]" onClick={handleToggleTransactionDropdown}>
                 <button>
                   Recent Transactions: {transactionHashes.length}
@@ -298,7 +301,7 @@ export default function AccountPage() {
                   {isLoading ? (
                     <p>Loading transactions...</p>
                   ) : transactionHashes.length > 0 ? (
-                    <ul className="space-y-4 max-w-[650px] p-2">
+                    <ul className="space-y-4 max-w-[650px] p-2 min-h-[450px]">
                       {paginate(transactionHashes, currentTransactionPage, itemsPerPage).map((transaction: any, index) => (
                         <li key={index}>
                           Hash: {transaction.hash.substring(0, 14)}..., Value: {ethers.formatEther(transaction.value)} ETH
@@ -319,7 +322,7 @@ export default function AccountPage() {
                 </>
               )}
             </div>
-            <div className="relative p-3 w-full min-h-[450px] bg-black bg-opacity-70 blur-background rounded-lg">
+            <div className="relative p-3 w-full  bg-black bg-opacity-70 blur-background rounded-lg">
               <div className="flex justify-between w-full items-center gap-x-2 mb-2  text-[#0ff]"  onClick={handleToggleDropdown}>
               <button>
                 Token Holdings: {tokenHoldings.length} 
@@ -338,7 +341,7 @@ export default function AccountPage() {
               </div>
              
               {showDropdown && (
-                <div className="w-full">
+                <div className="w-full min-h-[450px]">
                   <ul>
                     {paginate(tokenHoldings, currentPage, itemsPerPage).map((token, index) => (
                       <li key={index} className=" px-3 py-3 ">
