@@ -2,6 +2,7 @@
 
 import { EtherscanContext } from '@/app/RootLayoutContext';
 import { ethers } from 'ethers';
+import Link from 'next/link';
 import { useState, useEffect, useContext } from 'react';
 
 const BlockPage = () => {
@@ -34,7 +35,7 @@ const BlockPage = () => {
 
 
   return (
-    <div className="max-w-4xl mx-auto mt-10 p-5 bg-gray-800 text-white rounded-lg shadow-lg">
+    <div className="max-w-4xl mx-auto mt-10 p-5  bg-black bg-opacity-30 text-white rounded-lg  blur-background shadow-lg">
       <h1 className="text-2xl font-bold mb-5">Block Number: {blockNumber}</h1>
       <div className="space-y-4">
         <div className="flex justify-between items-center">
@@ -42,8 +43,12 @@ const BlockPage = () => {
           <span>{new Date(blockDetails.timestamp * 1000).toLocaleString()}</span>
         </div>
         <div className="flex justify-between items-center">
-          <span>Miner:</span>
-          <span>{blockDetails.miner}</span>
+        <span>Miner:</span>
+        <Link href={`/account/${blockDetails.miner}`}>
+      
+                      {blockDetails.miner}
+                    </Link>
+   
         </div>
         <div className="flex justify-between items-center">
           <span>Number of Transactions:</span>

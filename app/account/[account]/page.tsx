@@ -1,4 +1,4 @@
-"use client";
+"use client";;
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import { getBalance } from "viem/actions";
@@ -8,6 +8,7 @@ import TokenTable from "../components/RenderTable";
 import TokenTabs from "../components/TokenTabs";
 import Moralis from "moralis";
 import { EvmChain } from "@moralisweb3/common-evm-utils";
+import { FaSpinner } from "react-icons/fa";
 
 
 type TokenTransaction = {
@@ -34,10 +35,11 @@ let isMoralisStarted = false;
 export default function AccountPage() {
   const [accountAddress, setAccountAddress] = useState("");
   const [transactionHashes, setTransactionHashes] = useState<string[]>([]);
+  const [values, setValues] = useState<string[]>([]);
+
   const [selectedTab, setSelectedTab] = useState('ERC-20');
 
-  /* const [transactions, setTransactions] = useState<Transaction[]>([]);
-   */ const [isLoading, setIsLoading] = useState(true);
+   const [isLoading, setIsLoading] = useState(false);
    const [tokenHoldings, setTokenHoldings] = useState<any[]>([]);
    const [showDropdown, setShowDropdown] = useState(false);
  
@@ -71,48 +73,37 @@ export default function AccountPage() {
   }, []);
 
   const fetchBalance = async (address: any) => {
+    setIsLoading(true)
     if (ethers.isAddress(address)) {
       try {
+       
         const balanceResult = await getBalance(client, {
           address: address as `0x${string}`,
         });
-        setBalance(ethers.formatEther(balanceResult.valueOf())); // Assuming the balance is in 'value' and in 'wei'
+        setBalance(ethers.formatEther(balanceResult.valueOf())); 
       } catch (error) {
         console.error("Error fetching balance:", error);
         setBalance("Error");
       }
     }
+    setIsLoading(false)
   };
 
-  /* const fetchTransactionsWagmi = async (address: string) => {
-    setIsLoading(true);
-    if (ethers.isAddress(address)) {
-      try {
-        const transactionResult = await getTransaction(client, {
-          hash: address as `0x${string}`, // Assuming you want to fetch transactions based on hash
-        });
-        setTransactions([transactionResult]); // Update the state with the fetched transactions
-      } catch (error) {
-        console.error('Error fetching transactions:', error);
-        setTransactions([]);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-  }; */
+
   const fetchTransactions = async (address: string) => {
     const API_ETHER_KEY = "DCBMMRGDHRZ9ZAXN9F98II2JQ2GREDSG29";
-
+    setIsLoading(true)
     try {
       const response = await axios.get(
         `https://api.etherscan.io/api?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&page=1&offset=10&sort=asc&apikey=${API_ETHER_KEY}`
       );
       if (response.data.status === "1" && response.data.result) {
-        const hashes = response.data.result.map(
-          (tx: { hash: string }) => tx.hash
-        );
-        setTransactionHashes(hashes);
-      } else {
+        const transactions = response.data.result.map((tx: any) => ({
+            hash: tx.hash,
+            value: tx.value // This is the value in wei
+        }));
+        setTransactionHashes(transactions);}
+         else {
         console.error("API Error:", response.data);
         setTransactionHashes([]);
       }
@@ -126,7 +117,7 @@ export default function AccountPage() {
 
   const fetchERC20Transactions = async (address: string) => {
     const API_ETHER_KEY = "KR57X3MVZUU24DCBMNX3ZABVF4PUXKPVAH";
-
+    setIsLoading(true)
     try {
       const response = await axios.get(
         `https://api.etherscan.io/api?module=account&action=tokentx&address=${address}&page=1&offset=100&startblock=0&endblock=99999999&sort=asc&apikey=${API_ETHER_KEY}`
@@ -141,11 +132,14 @@ export default function AccountPage() {
       console.error("Error fetching ERC-20 transactions:", error);
       setErc20Transactions([]);
     }
+    finally {
+      setIsLoading(false);
+    }
   };
 
   const fetchERC721Transactions = async (address: string) => {
     const API_ETHER_KEY = "5FKGRH8CW2C4TIW9ME321HB6XXY53HZZP1";
-
+    setIsLoading(true)
     try {
       const response = await axios.get(
         `https://api.etherscan.io/api?module=account&action=tokennfttx&address=${address}&page=1&offset=100&startblock=0&endblock=99999999&sort=asc&apikey=${API_ETHER_KEY}`
@@ -156,13 +150,18 @@ export default function AccountPage() {
         console.error("API Error:", response.data);
         setErc721Transactions([]);
       }
+      
     } catch (error) {
       console.error("Error fetching ERC-721 transactions:", error);
       setErc721Transactions([]);
+    }finally {
+      setIsLoading(false);
     }
   };
  
   const runApp = async (address: string) => {
+    setIsLoading(true);
+
     if (!isMoralisStarted) {
       await Moralis.start({
         apiKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6Ijk5OWFmZTI4LTQ4NmUtNGNlZS04YmJjLTc2ZWE2OWYyYTNlYSIsIm9yZ0lkIjoiMzk1ODg1IiwidXNlcklkIjoiNDA2Nzk5IiwidHlwZUlkIjoiMGUyOWMyZTgtNzQ1My00ZGYzLWI0NmYtN2NkYjIwYzYzMDFjIiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE3MTgwNTI2MzgsImV4cCI6NDg3MzgxMjYzOH0.ri5uFEgtz6l4iEdQB79hxj0w_O27TMP-YWXEVAlXaJU",
@@ -187,9 +186,13 @@ export default function AccountPage() {
         console.error("Error fetching wallet token balances:", error);
       }
     }
+    finally {
+      setIsLoading(false);
+    }
   };
   const fetchERC1155Transactions = async (address: string) => {
     const API_ETHER_KEY = "DCBMMRGDHRZ9ZAXN9F98II2JQ2GREDSG29";
+    setIsLoading(true);
 
     try {
       const response = await axios.get(
@@ -204,6 +207,8 @@ export default function AccountPage() {
     } catch (error) {
       console.error("Error fetching ERC-1155 transactions:", error);
       setErc1155Transactions([]);
+    }finally {
+      setIsLoading(false);
     }
   };
 
@@ -223,11 +228,24 @@ export default function AccountPage() {
   const handleToggleDropdown = () => {
     setShowDropdown(!showDropdown);
   };
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center">
+        <FaSpinner className="animate-spin text-4xl text-white" />
+        
+      </div>
+    );
+  }
+
 
   return (
-    <div>
+    <div className="p-16">
+ <div className="bg-black bg-opacity-30 text-white rounded-lg  blur-background shadow-lg p-6">
       {!accountAddress ? (
-        <div>Loading account details...</div>
+        <div>
+                  <FaSpinner className="animate-spin text-4xl text-white" />
+
+          Loading account details...</div>
       ) : (
         <>
           <h1>Account Details for {accountAddress}</h1>
@@ -236,10 +254,12 @@ export default function AccountPage() {
           {isLoading ? (
             <p>Loading transactions...</p>
           ) : transactionHashes.length > 0 ? (
-            <ul>
-              {transactionHashes.map((hash, index) => (
-                <li key={index}>Transaction Hash: {hash}</li>
-              ))}
+            <ul className="space-y-4 p-2 ">
+             {transactionHashes.map((transaction:any, index) => (
+                        <li key={index}>
+                            Hash: {transaction.hash}, Value: {ethers.formatEther(transaction.value)} ETH
+                        </li>
+                    ))}
             </ul>
           ) : (
             <p>No transactions found.</p>
@@ -263,5 +283,7 @@ export default function AccountPage() {
         </>
       )}
     </div>
+    </div>
+   
   );
 }

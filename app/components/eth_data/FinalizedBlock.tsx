@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { ImSpinner2 } from 'react-icons/im'; // Spinner icon for loading
+import { ImSpinner2 } from 'react-icons/im';
 import { MdAccessTime } from 'react-icons/md'; // Time icon
 
 const FetchFinalizedBlock = () => {

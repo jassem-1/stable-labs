@@ -81,16 +81,17 @@ export default function Home() {
       </div>
 
       <div className="py-16 text-white max-w-6xl justify-center items-start  mx-auto flex gap-x-4">
-      <div className="w-1/2 p-4 bg-black bg-opacity-30 text-white rounded-lg shadow-lg blur-background  ">
-        <h3 className="text-lg  font-semibold my-2">Latest Blocks</h3>
-        <div className="max-h-96 min-w-[40%] overflow-y-auto space-y-4 p-2 border ">
+      <div className="w-1/2 p-4 bg-black bg-opacity-40 text-white rounded-lg shadow-lg blur-background  ">
+        <h3 className="text-lg  text-white font-semibold my-2">Latest Blocks</h3>
+        <div className="max-h-96 min-w-[40%] overflow-y-auto space-y-4 p-2  ">
     
           {tenBlockWithDetails.slice(0, 6).map((el, i) => (
-            <div key={i + 1} className=" shadow-lg p-5 rounded-lg">
+            <div key={i + 1} className=" hover:border hover:border-white shadow-lg p-5 rounded-2xl">
               <div className="flex flex-col space-y-2">
-                <p className="text-blue-600">
+                <p className="text-white">
                   <Link href={`/block/${el.number.toString()}`}>
-                    Block Number: {el.number}
+                  <span className="rounded-xl bg-opacity-30 bg-black p-1">Block Number:</span> Block Number:
+                   <span className="text-[#00ffffbf]">{el.number}</span> 
                   </Link>
                 </p>
                 <p>Timestamp: {new Date(el.timestamp * 1000).toLocaleString()}</p>
@@ -118,15 +119,15 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="w-1/2 p-4 bg-black bg-opacity-30 text-white rounded-lg shadow-lg blur-background ">
-        <h3 className="text-lg font-bold my-2">Latest Transactions</h3>
-        <div className="max-h-96 overflow-y-auto space-y-4 p-2 border border-gray-300 rounded-lg">
+      <div className="w-1/2 p-4 bg-black bg-opacity-40 text-white rounded-lg shadow-lg blur-background ">
+        <h3 className="  text-lg font-bold my-2">Latest Transactions</h3>
+        <div className="max-h-96 overflow-y-auto space-y-4 p-2  rounded-lg">
           {transaction?.transactions.slice(0, 6).map((txHash, i) => (
-            <div key={i} className=" shadow-lg p-5 rounded-lg">
+            <div key={i} className=" shadow-lg p-2 rounded-lg">
               <div className="flex justify-between">
-                <p className="text-blue-600">
-                  <Link href={`/transaction/${txHash}`}>
-                    Transaction: {txHash.slice(0, 55)}
+                <p className="text-white p-2 rounded-2xl hover:border hover:border-white">
+                  <Link href={`/transaction/${txHash}`} className="text-sm">
+                   <span className="text-white text-base">Transaction:</span>   {txHash.slice(0, 55)}
                   </Link>
                 </p>
               </div>

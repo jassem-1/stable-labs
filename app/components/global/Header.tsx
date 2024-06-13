@@ -66,7 +66,7 @@ const Header: React.FC = () => {
       <div className="neon my-4"></div>
 
       <div className="flex justify-between items-center w-full text-white">
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-y-3">
           {priceLoading ? <ImSpinner2 className="animate-spin" /> : <p>Ether price: ${price}</p>}
           {gasPriceLoading ? <ImSpinner2 className="animate-spin" /> : <p>Gas price: {gasPrice} Gwei</p>}
         </div> 

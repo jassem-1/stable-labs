@@ -24,7 +24,7 @@
 .neon {
     height: 2px;
     background-color: #0ff; /* Cyan for neon color */
-    box-shadow: 0 0 5px rgba(0, 255, 255, 0.75),
+    box-shadow: 0 0 5px #00ffffbf,
                 0 0 10px rgba(0, 255, 255, 0.75),
                 0 0 20px rgba(0, 255, 255, 0.75),
                 0 0 40px #0ff,
