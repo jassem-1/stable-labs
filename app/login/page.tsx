@@ -2,17 +2,14 @@
 import { useState } from 'react';
 import { login } from './actions';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     await login(email, password);
-    router.refresh(); // Refresh the page after login
 
   };
 
